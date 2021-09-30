@@ -1,0 +1,51 @@
+/* Import tailwind css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn {
+        @apply text-white w-48 h-10 text-19px font-bold font-montserrat rounded-full border border-white flex justify-center items-center;
+    }
+    .btn-default {
+        background-color: #BAD7D5;
+    }
+    .btn-red {
+        background: linear-gradient(180deg, #F18B6D 0%, #AD3C3B 100%);
+        filter: drop-shadow(0px 6.40244px 10.2439px rgba(21, 72, 77, 0.6));
+    }
+}
+
+@layer utilities {
+    /* initiate custom fonts */
+    @font-face {
+        font-family: Helvetica;
+        src: url(../fonts/helvetica/Helvetica.woff);
+    }
+    
+    @font-face {
+        font-family: Montserrat;
+        src: url(../fonts/montserrat/Montserrat-Medium.woff);
+    }
+
+    /* Set custom scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 12px;
+        background-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #156d68;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: transparent;
+    }
+}
+
+/* Apply custom scrollbar to Body */
+body {
+    @apply custom-scrollbar;
+}
