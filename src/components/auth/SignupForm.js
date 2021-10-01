@@ -82,12 +82,15 @@ export default function SignupForm() {
 
             return errors;
         },
-        onSubmit: () => {
+        onSubmit: (values, {setSubmitting}) => {
+            setSubmitting(false);
             setShowConfirmPopup(true);
         }
     });
 
     const onSignup = () => {
+        console.log(formik.values)
+        formik.setSubmitting(true);
         dispatch(signupEmail({
             email: formik.values.email,
             password: formik.values.password
@@ -191,7 +194,7 @@ export default function SignupForm() {
                     <div className="flex justify-center mt-12">
                         <button type="button"
                             className="btn btn-red mr-5"
-                            onClick={onSignup}
+                            onClick={() => onSignup()}
                             disabled={formik.isSubmitting}>
                             Sign up
                         </button>
