@@ -49,6 +49,7 @@ export default function LoginSocial(props) {
                 clientId="778955323517-aopjr1riifiej8dfu5mndpiu55pvnpnb.apps.googleusercontent.com"
                 render={renderProps => (
                     <button
+                        type="button"
                         className="bg-white rounded-full flex justify-start items-center font-helvetica text-15px text-gray-700 w-60 h-7.5 px-8 mt-8"
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
@@ -69,6 +70,7 @@ export default function LoginSocial(props) {
                 callback={facebookResponse}
                 render={renderProps => (
                     <button
+                        type="button"
                         className="bg-white rounded-full flex justify-start items-center font-helvetica text-15px text-gray-700 w-60 h-7.5 px-8 mt-5"
                         onClick={renderProps.onClick}
                     >
