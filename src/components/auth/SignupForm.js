@@ -198,7 +198,7 @@ export default function SignupForm() {
 
                         <button type="button"
                             className="btn btn-default"
-                            onClick={setShowConfirmPopup(false)}>
+                            onClick={() => setShowConfirmPopup(false)}>
                             Yes, Skip
                         </button>
                     </div>
