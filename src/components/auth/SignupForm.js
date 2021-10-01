@@ -5,19 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
-import GoogleLogo from '../../assets/images/google-logo.png';
-import FacebookLogo from '../../assets/images/facebook-logo.png';
+import SignupSocial from './SignupSocial';
 
+import { useDispatch } from 'react-redux';
+import { signupEmail } from '../../store/authSlice';
 
 const Input = styled.input`
     box-shadow: 0px 4px 10px rgba(21, 87, 88, 0.5);
     border-radius: 5px;
-`;
-
-const SignupButton = styled.button`
-    background: linear-gradient(180deg, #F18B6D 0%, #AD3C3B 100%);
-    filter: drop-shadow(0px 6.40244px 10.2439px rgba(21, 72, 77, 0.6));
 `;
 
 const SignupConfirmPopup = styled.div`
@@ -55,6 +52,9 @@ export default function SignupForm() {
     const [signupFailed, setSignupFailed] = useState(false); // Flag variable to set login failed or not
     const [showConfirmPopup, setShowConfirmPopup] = useState(false); // Flag variable to show confirm popup or not
 
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     // Pass the useFormik() hook initial form values and a submit function that will
     // be called when the form is submitted
     const formik = useFormik({
@@ -75,15 +75,33 @@ export default function SignupForm() {
                 errors.password = 'Required';
             }
 
+            // check if confirm password is correct
+            if (values.password !== values.confirmPassword) {
+                errors.confirmPassword = 'Not same as password';
+            }
+
             return errors;
         },
-        onSubmit: (values, { setSubmitting }) => {
-            setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-            }, 400);
+        onSubmit: () => {
+            setShowConfirmPopup(true);
         }
     });
+
+    const onSignup = () => {
+        dispatch(signupEmail({
+            email: formik.values.email,
+            password: formik.values.password
+        }))
+            .then(function (result) {
+                let success = result.payload.success
+                if (success) {
+                    history.replace('/signup/success');
+                } else {
+                    setSignupFailed(true);
+                }
+            })
+            .finally(() => formik.setSubmitting(false) );
+    }
 
     return (
         <form className="lg:ml-28 flex flex-col items-center mt-32 xl:mt-40 w-full" onSubmit={formik.handleSubmit}>
@@ -92,15 +110,7 @@ export default function SignupForm() {
             <div className="text-22px font-helvetica text-default-color opacity-55 mt-4">Welcome</div>
 
             {/* Start Social sign up buttons */}
-            <button className="bg-white rounded-full flex justify-start items-center font-helvetica text-15px text-gray-700 w-60 h-7.5 px-8 mt-8">
-                <img src={GoogleLogo} alt="Google Logo" className="w-4.5 h-4.5 mr-5" />
-                Sign up with Google
-            </button>
-
-            <button className="bg-white rounded-full flex justify-start items-center font-helvetica text-15px text-gray-700 w-60 h-7.5 px-8 mt-5 whitespace-nowrap">
-                <img src={FacebookLogo} alt="Facebook Logo" className="w-4.5 h-4.5 mr-5" />
-                Sign up with Facebook
-            </button>
+            <SignupSocial setSignupFailed={setSignupFailed} />
             {/* End Social sign up buttons */}
 
             <div className="text-15px font-helvetica opacity-55 text-default-color my-5">or</div>
@@ -179,12 +189,16 @@ export default function SignupForm() {
                     </div>
 
                     <div className="flex justify-center mt-12">
-                        <button type="submit" className="btn btn-red mr-5">
+                        <button type="button"
+                            className="btn btn-red mr-5"
+                            onClick={onSignup}
+                            disabled={formik.isSubmitting}>
                             Sign up
                         </button>
 
-                        <button type="button" className="btn btn-default"
-                            disabled={formik.isSubmitting}>
+                        <button type="button"
+                            className="btn btn-default"
+                            onClick={setShowConfirmPopup(false)}>
                             Yes, Skip
                         </button>
                     </div>
@@ -196,7 +210,7 @@ export default function SignupForm() {
                 Already have an account?
             </Link>
 
-            <div className={`text-red-500 text-16px whitespace-nowrap mt-4 ${signupFailed ? '' : ''}`}>
+            <div className={`text-red-500 text-16px whitespace-nowrap mt-4 ${signupFailed ? '' : 'invisible'}`}>
                 Error, an account with this email already exists!
             </div>
         </form>

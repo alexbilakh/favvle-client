@@ -8,8 +8,10 @@ import { Link } from 'react-router-dom';
 
 import Logo from '../../assets/images/logo.png';
 import DescriptionImage from '../../assets/images/login-description-image.png';
-import GoogleLogo from '../../assets/images/google-logo.png';
-import FacebookLogo from '../../assets/images/facebook-logo.png';
+import LoginSocial from './LoginSocial';
+
+import { useDispatch } from 'react-redux';
+import { signinEmail } from '../../store/authSlice';
 
 const AuthContainer = styled.div`
     background: linear-gradient(167.69deg, #155A5A 8.4%, #157E75 43.21%, #5BC6B3 72.33%, #418F85 95.4%, #157E75 114.41%);
@@ -38,6 +40,8 @@ const Input = styled.input`
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false); // Flag variable to show password or not
     const [loginFailed, setLoginFailed] = useState(false); // Flag variable to set login failed or not
+    
+    const dispatch = useDispatch();
 
     // Pass the useFormik() hook initial form values and a submit function that will
     // be called when the form is submitted
@@ -60,11 +64,20 @@ export default function Login() {
 
             return errors;
         },
-        onSubmit: (values, { setSubmitting }) => {
-            setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-            }, 400);
+        onSubmit: async (values, { setSubmitting }) => {
+            setSubmitting(true);
+            setLoginFailed(false);
+
+            dispatch(signinEmail(values))
+                .then(function (result) {
+                    let success = result.payload.success
+                    if (success) {
+                        alert('Logged in successfully.');
+                    } else {
+                        setLoginFailed(true);
+                    }
+                })
+                .finally(() => setSubmitting(false));
         }
     });
 
@@ -93,22 +106,14 @@ export default function Login() {
                     <div className="text-22px font-helvetica text-default-color opacity-55 mt-4">Welcome back</div>
 
                     {/* Start Social Login Buttons */}
-                    <button className="bg-white rounded-full flex justify-start items-center font-helvetica text-15px text-gray-700 w-60 h-7.5 px-8 mt-8">
-                        <img src={GoogleLogo} alt="Google Logo" className="w-4.5 h-4.5 mr-5" />
-                        Login with Google
-                    </button>
-
-                    <button className="bg-white rounded-full flex justify-start items-center font-helvetica text-15px text-gray-700 w-60 h-7.5 px-8 mt-5">
-                        <img src={FacebookLogo} alt="Facebook Logo" className="w-4.5 h-4.5 mr-5" />
-                        Login with Facebook
-                    </button>
+                    <LoginSocial setLoginFailed={setLoginFailed} />
                     {/* End Social Login Buttons */}
 
                     <div className="text-15px font-helvetica opacity-55 text-default-color my-5">or</div>
 
                     {/* Start Normal Login inputs */}
                     <Input type="email" placeholder="Email"
-                        className={`w-full px-3 py-1 text-16px text-gray-500 focus:outline-none border ${(formik.errors.email || loginFailed) ? 'border-red-500' : ''}`}
+                        className={`w-full px-3 py-1 text-16px text-gray-500 focus:outline-none border ${((formik.touched.email && formik.errors.email) || loginFailed) ? 'border-red-500' : ''}`}
                         name="email"
                         onChange={formik.handleChange}
                         value={formik.values.email} />
@@ -117,7 +122,7 @@ export default function Login() {
                         <Input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
-                            className={`w-full pl-3 pr-8 py-1 text-16px text-gray-500 focus:outline-none border ${(formik.errors.password || loginFailed) ? 'border-red-500' : ''}`}
+                            className={`w-full pl-3 pr-8 py-1 text-16px text-gray-500 focus:outline-none border ${((formik.touched.password && formik.errors.password) || loginFailed) ? 'border-red-500' : ''}`}
                             name="password"
                             onChange={formik.handleChange}
                             value={formik.values.password} />
