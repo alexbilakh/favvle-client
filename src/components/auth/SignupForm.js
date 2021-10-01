@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faTimes, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
@@ -89,7 +89,6 @@ export default function SignupForm() {
     });
 
     const onSignup = () => {
-        console.log(formik.values)
         formik.setSubmitting(true);
         dispatch(signupEmail({
             email: formik.values.email,
@@ -100,6 +99,7 @@ export default function SignupForm() {
                 if (success) {
                     history.replace('/signup/success');
                 } else {
+                    setShowConfirmPopup(false);
                     setSignupFailed(true);
                 }
             })
@@ -171,7 +171,10 @@ export default function SignupForm() {
 
                 <button type="submit" className="btn btn-red mt-12"
                     disabled={formik.isSubmitting}>
-                    Sign up
+                    {formik.isSubmitting &&
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                    }
+                    {!formik.isSubmitting && 'Sign up'}
                 </button>
 
                 <button type="button" className="btn btn-default mt-3"
@@ -180,7 +183,7 @@ export default function SignupForm() {
                 </button>
 
                 <SignupConfirmPopup className={`${showConfirmPopup ? '' : 'invisible'}`}>
-                    <SignupConfirmPopupCloseBtn>
+                    <SignupConfirmPopupCloseBtn onClick={() => setShowConfirmPopup(false)}>
                         <FontAwesomeIcon icon={faTimes} />
                     </SignupConfirmPopupCloseBtn>
 
@@ -196,7 +199,10 @@ export default function SignupForm() {
                             className="btn btn-red mr-5"
                             onClick={() => onSignup()}
                             disabled={formik.isSubmitting}>
-                            Sign up
+                            {formik.isSubmitting &&
+                                <FontAwesomeIcon icon={faSpinner} spin />
+                            }
+                            {!formik.isSubmitting && 'Sign up'}
                         </button>
 
                         <button type="button"

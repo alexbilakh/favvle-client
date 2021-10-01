@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
     max-width: 530px;
@@ -16,7 +17,7 @@ export default function SignupSuccess() {
                 on Favvle!
             </div>
 
-            <button className="btn btn-red mt-16">Continue</button>
+            <Link to="/login" className="btn btn-red mt-16">Continue</Link>
         </Container>
     );
 }

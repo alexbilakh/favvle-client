@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 
@@ -146,7 +146,10 @@ export default function Login() {
                     <button type="submit"
                         className="btn btn-red mt-10"
                         disabled={formik.isSubmitting}>
-                        Login
+                        {formik.isSubmitting &&
+                            <FontAwesomeIcon icon={faSpinner} spin />
+                        }
+                        {!formik.isSubmitting && 'Login'}
                     </button>
                     {/* End Normal Login inputs */}
 
