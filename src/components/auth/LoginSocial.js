@@ -7,7 +7,10 @@ import GoogleLogo from '../../assets/images/google-logo.png';
 import FacebookLogo from '../../assets/images/facebook-logo.png';
 
 import { useDispatch } from 'react-redux';
-import { signinGoogle, signinFacebook } from '../../store/authSlice';
+import {
+    signinGoogle,
+    // signinFacebook
+} from '../../store/authSlice';
 
 export default function LoginSocial(props) {
     const dispatch = useDispatch();
@@ -29,19 +32,19 @@ export default function LoginSocial(props) {
     }
 
     const facebookResponse = (response) => {
-        dispatch(signinFacebook({
-            email: response.profileObj.email,
-            id: response.profileObj.googleId
-        }))
-            .then(function (result) {
-                let success = result.payload.success
-                if (success) {
-                    alert('Logged in successfully.');
-                    props.setLoginFailed(false);
-                } else {
-                    props.setLoginFailed(true);
-                }
-            });
+        // dispatch(signinFacebook({
+        //     email: response.profileObj.email,
+        //     id: response.profileObj.googleId
+        // }))
+        //     .then(function (result) {
+        //         let success = result.payload.success
+        //         if (success) {
+        //             alert('Logged in successfully.');
+        //             props.setLoginFailed(false);
+        //         } else {
+        //             props.setLoginFailed(true);
+        //         }
+        //     });
     }
     return(
         <React.Fragment>
@@ -65,7 +68,7 @@ export default function LoginSocial(props) {
             />
 
             <FacebookLogin
-                appId="1088597931155576"
+                appId="199227962186913"
                 autoLoad={false}
                 callback={facebookResponse}
                 render={renderProps => (

@@ -9,7 +9,10 @@ import GoogleLogo from '../../assets/images/google-logo.png';
 import FacebookLogo from '../../assets/images/facebook-logo.png';
 
 import { useDispatch } from 'react-redux';
-import { signupGoogle, signupFacebook } from '../../store/authSlice';
+import {
+    signupGoogle,
+    // signupFacebook
+} from '../../store/authSlice';
 
 function SignupSocial(props) {
     const dispatch = useDispatch();
@@ -32,19 +35,19 @@ function SignupSocial(props) {
     }
 
     const facebookSuccess = (response) => {
-        dispatch(signupFacebook({
-            email: response.profileObj.email,
-            id: response.profileObj.googleId
-        }))
-            .then(function (result) {
-                let success = result.payload.success
-                if (success) {
-                    props.setSignupFailed(false);
-                    history.replace('/signup/success');
-                } else {
-                    props.setSignupFailed(true);
-                }
-            });
+        // dispatch(signupFacebook({
+        //     email: response.profileObj.email,
+        //     id: response.profileObj.googleId
+        // }))
+        //     .then(function (result) {
+        //         let success = result.payload.success
+        //         if (success) {
+        //             props.setSignupFailed(false);
+        //             history.replace('/signup/success');
+        //         } else {
+        //             props.setSignupFailed(true);
+        //         }
+        //     });
     }
     return (
         <React.Fragment>
@@ -67,7 +70,7 @@ function SignupSocial(props) {
             />
 
             <FacebookLogin
-                appId="1088597931155576"
+                appId="199227962186913"
                 autoLoad={false}
                 callback={facebookSuccess}
                 render={renderProps => (
